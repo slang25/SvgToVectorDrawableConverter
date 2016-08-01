@@ -13,19 +13,23 @@ using Path = System.IO.Path;
 
 namespace SvgToVectorDrawableConverter
 {
-    class Program
+    public class Program
     {
         public static void Main(string[] args)
         {
-            new Program(args).RunAsync().Wait();
+            new Program(args, Console.Out, Console.Error).RunAsync().Wait();
         }
 
         private readonly string[] _args;
+        private readonly TextWriter _outWriter;
+        private readonly TextWriter _errorWriter;
 
-        public Program([NotNull] string[] args)
+        public Program([NotNull] string[] args, [NotNull] TextWriter outWriter, [NotNull] TextWriter errorWriter)
         {
             _args = new string[args.Length];
             args.CopyTo(_args, 0);
+            _outWriter = outWriter;
+            _errorWriter = errorWriter;
         }
 
         public async Task RunAsync()
@@ -51,13 +55,13 @@ namespace SvgToVectorDrawableConverter
             }
         }
 
-        private static void Convert(Options options)
+        private void Convert(Options options)
         {
             var converter = new SvgToVectorDocumentConverter(options.BlankVectorDrawablePath, options.FixFillType);
 
             foreach (var inputFile in Directory.GetFiles(options.InputDirectory, options.InputMask + ".svg", SearchOption.AllDirectories))
             {
-                Console.Write(".");
+                _outWriter.Write(".");
 
                 var subpath = PathHelper.Subpath(inputFile, options.InputDirectory);
                 var tempFile = PathHelper.GenerateTempFileName("svg");
@@ -101,26 +105,21 @@ namespace SvgToVectorDrawableConverter
             }
         }
 
-        private static void PrintWarnings(string subpath, ICollection<string> warnings)
+        private void PrintWarnings(string subpath, ICollection<string> warnings)
         {
-            if (warnings.Count == 0)
-            {
-                return;
-            }
-            var writer = Console.Out;
-            writer.WriteLine();
-            writer.Write($"[Warning(s)] {subpath}: ");
+            if (warnings.Count == 0) return;
+            _outWriter.WriteLine();
+            _outWriter.Write($"[Warning(s)] {subpath}: ");
             foreach (var warning in warnings)
             {
-                writer.WriteLine(warning);
+                _outWriter.WriteLine(warning);
             }
         }
 
-        private static void PrintError(string message)
+        private void PrintError(string message)
         {
-            var writer = Console.Error;
-            writer.WriteLine();
-            writer.WriteLine("[Error] " + message);
+            _errorWriter.WriteLine();
+            _errorWriter.WriteLine("[Error] " + message);
         }
     }
 }

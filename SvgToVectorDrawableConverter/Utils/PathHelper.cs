@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace SvgToVectorDrawableConverter.Utils
 {
-    static class PathHelper
+    public static class PathHelper
     {
         public static string Subpath(string filePath, string directoryPath)
         {

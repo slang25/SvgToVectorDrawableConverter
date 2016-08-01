@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvgToVectorDrawableConverter", "SvgToVectorDrawableConverter\SvgToVectorDrawableConverter.csproj", "{065B2607-256B-4F86-8367-7197F6F5EA3B}"
 EndProject
@@ -13,6 +13,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathFillTypeConverter", "PathFillTypeConverter\PathFillTypeConverter.csproj", "{AF734CDC-3D9E-437D-93BB-1D75C01F5363}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PathDebuggerVisualizer", "PathDebuggerVisualizer\PathDebuggerVisualizer.csproj", "{EA04830F-AC34-4A23-A0EC-66976AB8B926}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SvgToVectorDrawableConverter.Tests", "SvgToVectorDrawableConverter.Tests\SvgToVectorDrawableConverter.Tests.csproj", "{597AF4DA-6E2F-4B7C-90C7-E1A69F182F03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +34,10 @@ Global
 		{EA04830F-AC34-4A23-A0EC-66976AB8B926}.Debug|Any CPU.Build.0 = Release|Any CPU
 		{EA04830F-AC34-4A23-A0EC-66976AB8B926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA04830F-AC34-4A23-A0EC-66976AB8B926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{597AF4DA-6E2F-4B7C-90C7-E1A69F182F03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{597AF4DA-6E2F-4B7C-90C7-E1A69F182F03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{597AF4DA-6E2F-4B7C-90C7-E1A69F182F03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{597AF4DA-6E2F-4B7C-90C7-E1A69F182F03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

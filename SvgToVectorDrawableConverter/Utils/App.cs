@@ -6,7 +6,7 @@ namespace SvgToVectorDrawableConverter.Utils
 {
     static class App
     {
-        public static string ExePath => Environment.GetCommandLineArgs()[0];
+        public static string ExePath => Assembly.GetExecutingAssembly().Location;
 
         public static string Directory => Path.GetDirectoryName(ExePath);
 
