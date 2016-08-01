@@ -7,6 +7,7 @@ Put the output XML files into the ‘res/drawable’ directory of your app and r
 
 ## Requirements
 Inkscape (free and open-source vector graphics software) must be installed. Download it from https://inkscape.org/en/download
+After installation, make sure the application runs correctly.
 
 The converter can be downloaded
 [here ![releases](https://img.shields.io/github/release/a-student/SvgToVectorDrawableConverter.svg)](https://github.com/a-student/SvgToVectorDrawableConverter/releases)
