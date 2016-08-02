@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
@@ -33,7 +34,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             foreach (var split in PathDataSplitter.SplitByCommands(pathData))
             {
                 var command = split[0];
-                var parameters = PathDataSplitter.SplitParameters(split.Substring(1)).ToArray();
+                var parameters = PathDataSplitter.SplitParameters(split.Substring(1)).Select(ReformatParameter).ToArray();
                 Func<IEnumerable<string>, string> join = x => string.Join(" ", x);
 
                 result.Append(command);
@@ -52,6 +53,25 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
             result[0] = moveToUpper;
             return result.ToString();
+        }
+
+        private static readonly string DoubleFixedPointFormat = "0." + new string('#', 339);
+
+        /// <summary>
+        /// On some Android versions, the app crashes when trying to load an xml,
+        /// which contains scientific notations.
+        /// </summary>
+        private static string ReformatParameter(string parameter)
+        {
+            if (parameter.Any(x => x == 'e' || x == 'E'))
+            {
+                double value;
+                if (double.TryParse(parameter, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+                {
+                    parameter = value.ToString(DoubleFixedPointFormat, CultureInfo.InvariantCulture);
+                }
+            }
+            return parameter;
         }
     }
 }
