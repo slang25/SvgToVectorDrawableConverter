@@ -3,7 +3,7 @@ Batch converter of SVG images to Android VectorDrawable XML resource files.
 
 Put the output XML files into the ‘res/drawable’ directory of your app and reference to them in XML / Java code as to ordinary drawables.
 
-#### **Online version** of the converter (not batch) is [here](http://a-student.github.io/SvgToVectorDrawableConverter.Web/).
+### **Online version** of the converter (not batch) is [here](http://a-student.github.io/SvgToVectorDrawableConverter.Web/).
 
 ## Requirements
 Inkscape (free and open-source vector graphics software) must be installed. Download it from https://inkscape.org/en/download
@@ -29,7 +29,8 @@ svg2vd.exe -i *
 (Converts all SVG files in current directory.)
 
 ## Running on OS X
-OS X 10.7 or better, Mono and Inkscape are required. If you do not have Mono installed, please download and install it from http://www.mono-project.com/download and if you do not have Inkscape installed, please download and install it from https://inkscape.org/pt-br/download/mac-os/
+OS X 10.7 or better, Mono and Inkscape are required. If you do not have Mono installed, please download and install it from http://www.mono-project.com/download
+For Inkscape installation instructions visit https://inkscape.org/en/download/mac-os/
 
 Open terminal and run
 ```
@@ -71,14 +72,14 @@ mono svg2vd.exe -i \*
 
 
 ## Previewing vector drawables
-Android Studio is able to open vector drawables. Note that it does not handle fill-rule correctly.
+Android Studio is able to open vector drawables. Note that it does not always handle fill-rule correctly.
 
 ## Not supported SVG features
-These SVG elements are not supported by VectorDrawable: **patterns, masks, gradients, images.**
+These SVG elements are not supported by VectorDrawable: **patterns, masks, gradients, images,** etc.
 
-VectorDrawable **fill-rule** is always **non-zero** and cannot be changed.
+VectorDrawable **fill-rule** is always **non-zero** and cannot be changed prior to Android 7.0 (Nougat).
 If you end up with areas filled that should not be filled, that is because the SVG image was created using even-odd rule instead.
-There are three ways to deal with this problem: try specifying the `--fix-fill-type` option, manually edit SVGs in vector graphics software or use the **BetterVectorDrawable** library in your app.
+There are three ways to deal with this problem: try specifying the `--fix-fill-type` option, manually edit SVGs in vector graphics software or convert for Android 7.0+.
 
 ### Specifying the `--fix-fill-type` option
 This option is experimental, but it is worth trying first. The option uses complex mathematics to rebuild paths in such a way that rendering with any fill-rule leads to the same result.
@@ -90,15 +91,13 @@ If you see improperly filled area after this operation, using F2 tool select sub
 If you are using Sketch, select the path, right to the *Fills* property title there is settings icon, click it and choose *Non-Zero* option.
 To reverse the path direction apply *Layer* → *Paths* → *Reverse Order* command from the main menu.
 
-### BetterVectorDrawable library
-[This library](https://github.com/a-student/BetterVectorDrawable) gives you ability to use vector drawables on Android 4.0+
-
-BetterVectorDrawable supports **fillType** attribute in the vector drawable XML (analogue of SVG’s fill-rule).
-To produce vector drawables for this lib, append to the converter command the `--lib BetterVectorDrawable` argument like
+### Converting for Android 7.0
+This option does not fit all, because it requires setting `minSdkVersion` to 24 at least (Android 7.0 or later) in ‘build.gradle’.
+To produce vector drawables for Android 7.0, append to the converter command the `--lib ApiLevel24` argument like
 ```
-svg2vd.exe -i * --lib BetterVectorDrawable
+svg2vd.exe -i * --lib ApiLevel24
 ```
-This command creates vector drawables containing additional attributes that are understandable by the lib.
+This command creates vector drawables containing additional attributes that are understandable by Android 7.0+.
 
 ## Issues
 If you have any problems with the converter, please create an issue on GitHub (https://github.com/a-student/SvgToVectorDrawableConverter/issues/new),
