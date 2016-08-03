@@ -10,6 +10,36 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             : base(wrappedElement)
         { }
 
+        public override FillType FillType
+        {
+            get
+            {
+                switch (GetAttribute(string.Empty))
+                {
+                    case "even_odd":
+                    case "evenOdd":
+                        return FillType.even_odd;
+                    default:
+                        return default(FillType);
+                }
+            }
+            set
+            {
+                SetAttribute(value, "better");
+                switch (value)
+                {
+                    case FillType.winding:
+                        SetAttribute("nonZero", "api24", "nonZero");
+                        break;
+                    case FillType.even_odd:
+                        SetAttribute("evenOdd", "api24", "nonZero");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(value));
+                }
+            }
+        }
+
         public string FillColor
         {
             get { return GetAttribute<string>(); }

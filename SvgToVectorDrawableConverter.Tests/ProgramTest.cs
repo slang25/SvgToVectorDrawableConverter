@@ -47,6 +47,18 @@ namespace SvgToVectorDrawableConverter.Tests
         }
 
         [TestMethod]
+        public async Task ApiLevel24()
+        {
+            await RunTest("ApiLevel24", false);
+        }
+
+        [TestMethod]
+        public async Task ApiLevel24_FixFillType()
+        {
+            await RunTest("ApiLevel24", true);
+        }
+
+        [TestMethod]
         public async Task BetterVectorDrawable()
         {
             await RunTest("BetterVectorDrawable", false);

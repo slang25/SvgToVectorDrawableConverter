@@ -22,7 +22,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.VectorDrawable
             }
         }
 
-        public FillType FillType
+        public virtual FillType FillType
         {
             get { return (FillType)Enum.Parse(typeof(FillType), GetAttribute(default(FillType).ToString())); }
             set { SetAttribute(value, "better"); }

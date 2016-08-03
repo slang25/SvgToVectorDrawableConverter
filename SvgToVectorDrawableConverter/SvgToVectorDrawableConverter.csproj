@@ -129,6 +129,11 @@
       <Name>PathFillTypeConverter</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="BlankVectorDrawable.ApiLevel24.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(SolutionDir)\ILMerge.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
