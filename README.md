@@ -32,11 +32,15 @@ svg2vd.exe -i *
 OS X 10.7 or better, Mono and Inkscape are required. If you do not have Mono installed, please download and install it from http://www.mono-project.com/download
 For Inkscape installation instructions visit https://inkscape.org/en/download/mac-os/
 
-Open terminal and run
+Or if you use [Homebrew](http://brew.sh/) just run in terminal:
+```
+brew install mono homebrew/gui/inkscape
+```
+
+This command prints usage and option explanations:
 ```
 mono svg2vd.exe --help
 ```
-This command prints usage and option explanations.
 
 Typical usage:
 ```
