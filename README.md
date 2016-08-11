@@ -13,7 +13,7 @@ The converter can be downloaded
 [here ![releases](https://img.shields.io/github/release/a-student/SvgToVectorDrawableConverter.svg)](https://github.com/a-student/SvgToVectorDrawableConverter/releases)
 
 ## Running on Windows
-.NET Framework 4.5 or higher is required. Usually it is already installed on your operating system (enabled by default in Windows 8).
+.NET Framework 4.5 or higher is required. Usually it is already installed on your operating system (enabled by default in Windows 8/10).
 If you have older OS, please search the Microsoft web site for .NET Framework, download and install it.
 
 Open command prompt and run
