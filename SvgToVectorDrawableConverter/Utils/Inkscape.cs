@@ -9,15 +9,21 @@ namespace SvgToVectorDrawableConverter.Utils
     {
         public static string FindAppPath()
         {
-            switch (Environment.OSVersion.Platform)
+            var paths = new[]
             {
-                case PlatformID.Win32NT:
-                    return (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths\inkscape.exe", null, null);
-                case PlatformID.MacOSX:
-                    return "/Applications/Inkscape.app/Contents/Resources/bin/inkscape";
-                default:
-                    return "/usr/bin/inkscape";
+                "/Applications/Inkscape.app/Contents/Resources/bin/inkscape", // OS X
+                "/usr/bin/inkscape", // Linux
+                "/usr/local/bin/inkscape", // Homebrew
+                "/opt/local/bin/inkscape", // MacPorts
+            };
+
+            foreach (var path in paths)
+            {
+                if (File.Exists(path)) return path;
             }
+
+            // Windows
+            return (string)Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\App Paths\inkscape.exe", null, null);
         }
 
         /// <summary>
