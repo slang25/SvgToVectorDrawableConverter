@@ -54,7 +54,7 @@ Mono and Inkscape are required:
 ```
 sudo apt-get install mono-devel inkscape
 ```
-The converter is known to work well with Mono version 4.6.1. To check the vesion installed use the `mono --version` command. The latest Mono [installation guide](http://www.mono-project.com/download/#download-lin)
+The converter is known to work well with Mono version 4.6.1 and Inkscape version 0.91. To check the vesions installed use the `mono --version` or `inkscape --version` commands respectively. The latest Mono [installation guide](http://www.mono-project.com/download/#download-lin), get the latest Inkscape [here](https://inkscape.org/en/download/linux/)
 
 Open terminal and run
 ```
