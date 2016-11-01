@@ -52,7 +52,7 @@ mono svg2vd.exe -i \*
 Mono and Inkscape are required:
 
 ```
-sudo apt-get install mono-complete inkscape
+sudo apt-get install mono-devel inkscape
 ```
 The converter is known to work well with Mono version 4.6.1. To check the vesion installed use the `mono --version` command. The latest Mono [installation guide](http://www.mono-project.com/download/#download-lin)
 
