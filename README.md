@@ -110,3 +110,6 @@ explain the reproducing steps, and add link to the SVG file (link is optional bu
 
 ## Alternatives
 Less powerful online converter http://inloop.github.io/svg2android
+
+## The Software License
+[MIT](https://opensource.org/licenses/MIT)
