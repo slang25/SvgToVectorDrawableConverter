@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using JetBrains.Annotations;
 
 namespace PathFillTypeConverter.Data
 {
@@ -11,12 +14,12 @@ namespace PathFillTypeConverter.Data
         public double MinY { get; }
         public double MaxY { get; }
 
-        public Box(double minX, double maxX, double minY, double maxY)
+        public Box([NotNull] IReadOnlyCollection<Point> points)
         {
-            MinX = minX;
-            MaxX = maxX;
-            MinY = minY;
-            MaxY = maxY;
+            MinX = points.Min(x => x.X);
+            MaxX = points.Max(x => x.X);
+            MinY = points.Min(x => x.Y);
+            MaxY = points.Max(x => x.Y);
         }
 
         public Box(Point p1, Point p2)

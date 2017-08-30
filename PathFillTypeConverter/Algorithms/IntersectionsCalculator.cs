@@ -43,6 +43,57 @@ namespace PathFillTypeConverter.Algorithms
             }
         }
 
+        private struct LineIterator
+        {
+            private readonly Polyline _polyline;
+            private int _index;
+
+            private LineIterator(Polyline polyline, int index)
+            {
+                _polyline = polyline;
+                _index = index;
+            }
+
+            public LineIterator(Polyline polyline)
+                : this(polyline, 1)
+            { }
+
+            public LineIterator Clone()
+            {
+                return new LineIterator(_polyline, _index);
+            }
+
+            public bool MoveNextLine()
+            {
+                _index++;
+                return _index < _polyline.Points.Count;
+            }
+
+            private int NextPartIndex
+            {
+                get
+                {
+                    var result = _index / PolylinePart.MaxLineCount;
+                    if (_index % PolylinePart.MaxLineCount > 0)
+                    {
+                        result++;
+                    }
+                    return result;
+                }
+            }
+
+            public void SkipCurrentPart()
+            {
+                _index = NextPartIndex * PolylinePart.MaxLineCount;
+            }
+
+            public Point CurrentStartPoint => _polyline.Points[_index - 1];
+            public Point CurrentEndPoint => _polyline.Points[_index];
+            public PolylinePart CurrentPart => _polyline.Parts[NextPartIndex - 1];
+            public bool IsFirstLine => _index == 1;
+            public bool IsLastLine => _index == _polyline.Points.Count - 1;
+        }
+
         private static void CalculateSelfIntersections(SegmentBase segment)
         {
             if (!(segment is CubicBezierSegment))
@@ -50,75 +101,80 @@ namespace PathFillTypeConverter.Algorithms
                 // only cubic bezier segment can self-intersect
                 return;
             }
-            var points = segment.PolylineApproximation.Points;
-            for (var i = 1; i < points.Count - 2; i++)
+            var iterator1 = new LineIterator(segment.PolylineApproximation);
+            while (iterator1.MoveNextLine())
             {
-                var p11 = points[i - 1];
-                var p12 = points[i];
-                var box1 = new Box(p11, p12);
-                for (var j = i + 2; j < points.Count; j++)
+                var iterator2 = iterator1.Clone();
+                if (!iterator2.MoveNextLine())
                 {
-                    var p21 = points[j - 1];
-                    var p22 = points[j];
-                    var box2 = new Box(p21, p22);
-                    if (!box1.IntersectsWith(box2))
+                    return;
+                }
+                var skipCurrentPart1 = true;
+                while (iterator2.MoveNextLine())
+                {
+                    if (!iterator1.CurrentPart.BoundingBox.IntersectsWith(iterator2.CurrentPart.BoundingBox))
                     {
+                        iterator2.SkipCurrentPart();
                         continue;
                     }
-                    var intersection = CalculateIntersection(p11, p12, p21, p22);
+                    skipCurrentPart1 = false;
+                    var intersection = CalculateIntersection(iterator1.CurrentStartPoint, iterator1.CurrentEndPoint, iterator2.CurrentStartPoint, iterator2.CurrentEndPoint);
                     if (intersection.HasValue)
                     {
                         segment.Intersections.Add(intersection.Value);
                     }
+                }
+                if (skipCurrentPart1)
+                {
+                    iterator1.SkipCurrentPart();
                 }
             }
         }
 
         private static void CalculateIntersections(SegmentBase segment1, SegmentBase segment2, bool skipInner, bool skipOuter)
         {
-            var boundingBox1 = segment1.PolylineApproximation.BoundingBox;
-            var boundingBox2 = segment2.PolylineApproximation.BoundingBox;
-            if (!boundingBox1.IntersectsWith(boundingBox2))
+            if (!segment1.PolylineApproximation.BoundingBox.IntersectsWith(segment2.PolylineApproximation.BoundingBox))
             {
                 return;
             }
-            var points1 = segment1.PolylineApproximation.Points;
-            var points2 = segment2.PolylineApproximation.Points;
-            for (var i = 1; i < points1.Count; i++)
+            var iterator1 = new LineIterator(segment1.PolylineApproximation);
+            while (iterator1.MoveNextLine())
             {
-                var p11 = points1[i - 1];
-                var p12 = points1[i];
-                var box1 = new Box(p11, p12);
-                if (!box1.IntersectsWith(boundingBox2))
+                var iterator2 = new LineIterator(segment2.PolylineApproximation);
+                var skipCurrentPart1 = true;
+                while (iterator2.MoveNextLine())
                 {
-                    continue;
-                }
-                for (var j = 1; j < points2.Count; j++)
-                {
-                    var p21 = points2[j - 1];
-                    var p22 = points2[j];
-                    var box2 = new Box(p21, p22);
-                    if (!box1.IntersectsWith(box2))
+                    if (!iterator1.CurrentPart.BoundingBox.IntersectsWith(iterator2.CurrentPart.BoundingBox))
+                    {
+                        iterator2.SkipCurrentPart();
+                        continue;
+                    }
+                    skipCurrentPart1 = false;
+                    if ((skipInner && iterator1.IsLastLine && iterator2.IsFirstLine) ||
+                        (skipOuter && iterator1.IsFirstLine && iterator2.IsLastLine))
                     {
                         continue;
                     }
-                    if ((skipInner && i == points1.Count - 1 && j == 1) ||
-                        (skipOuter && i == 1 && j == points2.Count - 1))
-                    {
-                        continue;
-                    }
-                    var intersection = CalculateIntersection(p11, p12, p21, p22);
+                    var intersection = CalculateIntersection(iterator1.CurrentStartPoint, iterator1.CurrentEndPoint, iterator2.CurrentStartPoint, iterator2.CurrentEndPoint);
                     if (intersection.HasValue)
                     {
                         segment1.Intersections.Add(intersection.Value);
                         segment2.Intersections.Add(intersection.Value);
                     }
                 }
+                if (skipCurrentPart1)
+                {
+                    iterator1.SkipCurrentPart();
+                }
             }
         }
 
         private static Point? CalculateIntersection(Point p11, Point p12, Point p21, Point p22)
         {
+            if (!new Box(p11, p12).IntersectsWith(new Box(p21, p22)))
+            {
+                return null;
+            }
             var s1 = p12 - p11;
             var s2 = p22 - p21;
             var a = p11 - p21;

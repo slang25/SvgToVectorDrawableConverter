@@ -68,6 +68,7 @@
     <Compile Include="Data\EllipticalArcSegment.cs" />
     <Compile Include="Data\Polygon.cs" />
     <Compile Include="Data\Polyline.cs" />
+    <Compile Include="Data\PolylinePart.cs" />
     <Compile Include="Data\QuadraticBezierSegment.cs" />
     <Compile Include="Data\CubicBezierSegment.cs" />
     <Compile Include="Data\LineSegment.cs" />
