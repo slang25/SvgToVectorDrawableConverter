@@ -101,6 +101,7 @@ namespace PathFillTypeConverter.Algorithms
                 // only cubic bezier segment can self-intersect
                 return;
             }
+            ConvertTimer.ThrowIfOvertime();
             var iterator1 = new LineIterator(segment.PolylineApproximation);
             while (iterator1.MoveNextLine())
             {
@@ -137,6 +138,7 @@ namespace PathFillTypeConverter.Algorithms
             {
                 return;
             }
+            ConvertTimer.ThrowIfOvertime();
             var iterator1 = new LineIterator(segment1.PolylineApproximation);
             while (iterator1.MoveNextLine())
             {

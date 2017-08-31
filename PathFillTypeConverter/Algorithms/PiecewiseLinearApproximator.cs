@@ -8,8 +8,6 @@ namespace PathFillTypeConverter.Algorithms
 {
     static class PiecewiseLinearApproximator
     {
-        private const double MaxPieceLength = 0.05;
-
         private struct Piece
         {
             public double T0 { get; }
@@ -30,13 +28,15 @@ namespace PathFillTypeConverter.Algorithms
 
         private static List<Point> Approximate(Func<double, Point> curve, Point startPoint, Point endPoint)
         {
+            var maxPieceLengthSquared = Square(ConvertQuality.PiecewiseLinearApproximatorMaxPieceLength);
+
             var approximation = new List<Point> { startPoint };
             var stack = new Stack<Piece>();
             stack.Push(new Piece(0, 1, startPoint, endPoint));
             while (stack.Count > 0)
             {
                 var piece = stack.Pop();
-                if (piece.SquareLength <= Square(MaxPieceLength))
+                if (piece.SquareLength <= maxPieceLengthSquared)
                 {
                     approximation.Add(piece.P1);
                 }

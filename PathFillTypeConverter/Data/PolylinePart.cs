@@ -8,7 +8,7 @@ namespace PathFillTypeConverter.Data
     [Serializable]
     public class PolylinePart
     {
-        public const int MaxLineCount = 100;
+        public const int MaxLineCount = 50;
 
         private sealed class PointCollection : IReadOnlyCollection<Point>
         {

@@ -64,6 +64,8 @@
     <Compile Include="Algorithms\SubpathDirectionReverser.cs" />
     <Compile Include="Algorithms\SubpathUnifier.cs" />
     <Compile Include="Algorithms\TreeBuilder.cs" />
+    <Compile Include="ConvertQuality.cs" />
+    <Compile Include="ConvertTimer.cs" />
     <Compile Include="Data\Box.cs" />
     <Compile Include="Data\EllipticalArcSegment.cs" />
     <Compile Include="Data\Polygon.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Data\Path.cs" />
     <Compile Include="Data\Subpath.cs" />
     <Compile Include="Diagnostics\Debugger.cs" />
+    <Compile Include="Exceptions\ConvertOvertimeException.cs" />
     <Compile Include="Exceptions\PathDataConverterException.cs" />
     <Compile Include="Extensions\DoubleExtension.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />

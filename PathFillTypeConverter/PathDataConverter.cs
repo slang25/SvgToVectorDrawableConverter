@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using PathFillTypeConverter.Algorithms;
+using PathFillTypeConverter.Exceptions;
 
 namespace PathFillTypeConverter
 {
@@ -8,23 +9,35 @@ namespace PathFillTypeConverter
         [CanBeNull]
         public static string ConvertFillTypeFromEvenOddToWinding([CanBeNull] string pathData, out bool separatePathForStroke)
         {
-            if (!string.IsNullOrEmpty(pathData))
+            ConvertQuality.SetDefault();
+            while (true)
             {
-                var path = new PathParser().Parse(pathData);
-                path = PathPreprocessor.Preprocess(path);
-                var convert0 = PathFormatter.ToString(path);
-                path = PathConverter.EliminateIntersections(path);
-                var convert1 = PathFormatter.ToString(path);
-                path = PathConverter.FixDirections(path);
-                var convert2 = PathFormatter.ToString(path);
-                if (convert2 != convert0)
+                ConvertTimer.Restart();
+                try
                 {
-                    separatePathForStroke = convert1 != convert0;
-                    return convert2;
+                    if (!string.IsNullOrEmpty(pathData))
+                    {
+                        var path = new PathParser().Parse(pathData);
+                        path = PathPreprocessor.Preprocess(path);
+                        var convert0 = PathFormatter.ToString(path);
+                        path = PathConverter.EliminateIntersections(path);
+                        var convert1 = PathFormatter.ToString(path);
+                        path = PathConverter.FixDirections(path);
+                        var convert2 = PathFormatter.ToString(path);
+                        if (convert2 != convert0)
+                        {
+                            separatePathForStroke = convert1 != convert0;
+                            return convert2;
+                        }
+                    }
+                    separatePathForStroke = false;
+                    return pathData;
+                }
+                catch (ConvertOvertimeException)
+                {
+                    ConvertQuality.Degrade();
                 }
             }
-            separatePathForStroke = false;
-            return pathData;
         }
     }
 }

@@ -5,5 +5,6 @@ bin
 obj
 *.user
 _ReSharper.*
+*.vspx
 
 /test-data
