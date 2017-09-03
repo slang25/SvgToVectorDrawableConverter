@@ -19,7 +19,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
     static class ClipPathHelper
     {
-        public static IEnumerable<PathWithStyle> ExtractPaths(ClipPath clipPath)
+        public static IEnumerable<PathWithStyle> ExtractPaths(G clipPath)
         {
             return ExtractPaths(clipPath, StyleHelper.InitialStyles);
         }

@@ -14,7 +14,8 @@ namespace SvgToVectorDrawableConverter.Utils
             xmlDocument.Load(inputFileName);
 
             WrapSvgContentInG(xmlDocument);
-            ReplaceDefs(xmlDocument.DocumentElement);
+            ReplaceWithG(xmlDocument.DocumentElement, "defs");
+            ReplaceWithG(xmlDocument.DocumentElement, "clipPath");
             SvgUseElementInliner.InlineUses(xmlDocument);
 
             xmlDocument.Save(outputFileName);
@@ -31,13 +32,13 @@ namespace SvgToVectorDrawableConverter.Utils
             svg.AppendChild(g);
         }
 
-        private static void ReplaceDefs(XmlNode xmlNode)
+        private static void ReplaceWithG(XmlNode xmlNode, string nodeName)
         {
             for (var i = 0; i < xmlNode.ChildNodes.Count; i++)
             {
                 var childNode = xmlNode.ChildNodes[i];
-                ReplaceDefs(childNode);
-                if (childNode.Name != "defs")
+                ReplaceWithG(childNode, nodeName);
+                if (childNode.Name != nodeName)
                 {
                     continue;
                 }

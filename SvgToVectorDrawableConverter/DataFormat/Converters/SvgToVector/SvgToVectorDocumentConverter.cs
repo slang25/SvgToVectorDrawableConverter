@@ -4,7 +4,9 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
+using MathNet.Numerics.LinearAlgebra.Double;
 using PathFillTypeConverter;
+using PathFillTypeConverter.Utils;
 using SvgToVectorDrawableConverter.DataFormat.Common;
 using SvgToVectorDrawableConverter.DataFormat.Exceptions;
 using SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics;
@@ -13,7 +15,7 @@ using Group = SvgToVectorDrawableConverter.DataFormat.VectorDrawable.Group;
 using VdPath = SvgToVectorDrawableConverter.DataFormat.VectorDrawable.Path;
 using SvgPath = SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics.Path;
 using VdClipPath = SvgToVectorDrawableConverter.DataFormat.VectorDrawable.ClipPath;
-using SvgClipPath = SvgToVectorDrawableConverter.DataFormat.ScalableVectorGraphics.ClipPath;
+using Vector = SvgToVectorDrawableConverter.DataFormat.VectorDrawable.Vector;
 
 namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 {
@@ -122,11 +124,11 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             return string.Format(CultureInfo.InvariantCulture, "{0}dp", UnitConverter.ConvertToPx(length, reference));
         }
 
-        private void InitRecursively(Group group, G g, StringDictionary parentStyle)
+        private void InitRecursively(Group outerGroup, Group innerGroup, G g, StringDictionary parentStyle)
         {
             var style = StyleHelper.MergeStyles(parentStyle, g.Style);
-            Init(group, g.Transform, style);
-            AppendAll(group.Children, g.Children, style);
+            Init(outerGroup, innerGroup, g.Transform, style);
+            AppendAll(innerGroup.Children, g.Children, style);
 
             _isGroupOpacityUsed |= style["opacity"] != null;
         }
@@ -141,12 +143,16 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                 }
                 if (child is G)
                 {
-                    InitRecursively(elements.Append<Group>(), (G)child, parentStyle);
+                    var outerGroup = elements.Append<Group>();
+                    var innerGroup = outerGroup.Children.Append<Group>();
+                    InitRecursively(outerGroup, innerGroup, (G)child, parentStyle);
                     continue;
                 }
                 if (child is SvgPath)
                 {
-                    Init(elements.Append<Group>(), (SvgPath)child, parentStyle);
+                    var outerGroup = elements.Append<Group>();
+                    var innerGroup = outerGroup.Children.Append<Group>();
+                    Init(outerGroup, innerGroup, (SvgPath)child, parentStyle);
                     continue;
                 }
                 if (child is UnsupportedElement)
@@ -161,17 +167,17 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             return Styler.GetStyle(element)["display"] != "none";
         }
 
-        private void Init(Group group, SvgPath svgPath, StringDictionary parentStyle)
+        private void Init(Group outerGroup, Group innerGroup, SvgPath svgPath, StringDictionary parentStyle)
         {
             var style = StyleHelper.MergeStyles(parentStyle, svgPath.Style);
-            Init(group, svgPath.Transform, style);
-            var fillPath = group.Children.Append<VdPath>();
+            Init(outerGroup, innerGroup, svgPath.Transform, style);
+            var fillPath = innerGroup.Children.Append<VdPath>();
             var strokePath = fillPath;
 
             fillPath.PathData = svgPath.D;
             if (style.ContainsKey("fill") && SetFillType(fillPath, style["fill-rule"]))
             {
-                strokePath = group.Children.Append<VdPath>();
+                strokePath = innerGroup.Children.Append<VdPath>();
                 strokePath.PathData = PathDataFixer.Fix(svgPath.D);
             }
             fillPath.PathData = PathDataFixer.Fix(fillPath.PathData);
@@ -222,35 +228,57 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
             }
         }
 
-        private void Init(Group group, Transform transform, StringDictionary style)
+        private void Init(Group outerGroup, Group innerGroup, Transform transform, StringDictionary style)
         {
             if (transform is Transform.Matrix)
             {
                 var matrix = (Transform.Matrix)transform;
-                group.ScaleX = (matrix.A >= 0 ? 1 : -1) * Math.Sqrt(matrix.A * matrix.A + matrix.B * matrix.B);
-                group.ScaleY = (matrix.D >= 0 ? 1 : -1) * Math.Sqrt(matrix.C * matrix.C + matrix.D * matrix.D);
-                group.Rotation = Math.Atan(matrix.B / matrix.A) * 180 / Math.PI;
-                group.TranslateX = matrix.E;
-                group.TranslateY = matrix.F;
+                if (matrix.A == 0 && matrix.D == 0)
+                {
+                    innerGroup.Rotation = 90;
+                    innerGroup.ScaleX = matrix.B;
+                    innerGroup.ScaleY = -matrix.C;
+                    innerGroup.TranslateX = matrix.E;
+                    innerGroup.TranslateY = matrix.F;
+                }
+                else if (matrix.A * matrix.C == -matrix.B * matrix.D)
+                {
+                    innerGroup.Rotation = MathHelper.ToDegrees(Math.Atan(matrix.B / matrix.A));
+                    innerGroup.ScaleX = Math.Sign(matrix.A) * Math.Sqrt(MathHelper.Square(matrix.A) + MathHelper.Square(matrix.B));
+                    innerGroup.ScaleY = Math.Sign(matrix.D) * Math.Sqrt(MathHelper.Square(matrix.C) + MathHelper.Square(matrix.D));
+                    innerGroup.TranslateX = matrix.E;
+                    innerGroup.TranslateY = matrix.F;
+                }
+                else
+                {
+                    var svd = DenseMatrix.OfArray(new[,] { { matrix.A, matrix.C }, { matrix.B, matrix.D } }).Svd();
+                    outerGroup.Rotation = MathHelper.ToDegrees(Math.Atan2(svd.U[1, 0], svd.U[0, 0]));
+                    innerGroup.Rotation = MathHelper.ToDegrees(Math.Atan2(svd.VT[1, 0], svd.VT[0, 0]));
+                    outerGroup.ScaleX = svd.S[0];
+                    outerGroup.ScaleY = svd.S[1] * svd.U.Determinant();
+                    innerGroup.ScaleY = svd.VT.Determinant();
+                    outerGroup.TranslateX = matrix.E;
+                    outerGroup.TranslateY = matrix.F;
+                }
             }
             if (transform is Transform.Translate)
             {
                 var translate = (Transform.Translate)transform;
-                group.TranslateX = translate.Tx;
-                group.TranslateY = translate.Ty;
+                innerGroup.TranslateX = translate.Tx;
+                innerGroup.TranslateY = translate.Ty;
             }
             if (transform is Transform.Scale)
             {
                 var scale = (Transform.Scale)transform;
-                group.ScaleX = scale.Sx;
-                group.ScaleY = scale.Sy;
+                innerGroup.ScaleX = scale.Sx;
+                innerGroup.ScaleY = scale.Sy;
             }
             if (transform is Transform.Rotate)
             {
                 var rotate = (Transform.Rotate)transform;
-                group.Rotation = rotate.Angle;
-                group.PivotX = rotate.Cx;
-                group.PivotY = rotate.Cy;
+                innerGroup.Rotation = rotate.Angle;
+                innerGroup.PivotX = rotate.Cx;
+                innerGroup.PivotY = rotate.Cy;
             }
 
             var clipPath = style["clip-path"];
@@ -262,9 +290,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                     throw new UnsupportedFormatException("Wrong clip-path attribute value.");
                 }
                 var key = match.Groups["key"].Value;
-                foreach (var x in ClipPathHelper.ExtractPaths((SvgClipPath)_map[key]))
+                foreach (var x in ClipPathHelper.ExtractPaths((G)_map[key]))
                 {
-                    var vdClipPath = group.Children.Append<VdClipPath>();
+                    var vdClipPath = innerGroup.Children.Append<VdClipPath>();
                     vdClipPath.PathData = x.Path.D;
                     SetFillType(vdClipPath, x.Style["clip-rule"]);
                     vdClipPath.PathData = PathDataFixer.Fix(vdClipPath.PathData);

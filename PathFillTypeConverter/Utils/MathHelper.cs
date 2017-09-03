@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace PathFillTypeConverter.Utils
 {
-    static class MathHelper
+    public static class MathHelper
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Square(double value)
