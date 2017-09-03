@@ -34,7 +34,7 @@ For Inkscape installation instructions visit https://inkscape.org/en/download/ma
 
 Or if you use [Homebrew](http://brew.sh/) just run in terminal:
 ```
-brew install mono homebrew/gui/inkscape
+brew install mono caskformula/caskformula/inkscape
 ```
 
 This command prints usage and option explanations:
