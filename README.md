@@ -75,6 +75,15 @@ mono svg2vd.exe -i \*
 ```
 (Converts all SVG files in current directory.)
 
+## Running in Docker
+Docker is available for Linux, [Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows) & [Mac](https://store.docker.com/editions/community/docker-ce-desktop-mac).
+
+Typical usage:
+```
+docker run -v c:/path/to/svgs/:/volume astudent/svg2vd -i /volume/*
+```
+(Converts all SVG files in the `c:/path/to/svgs` directory.)
+
 
 ## Previewing vector drawables
 Android Studio is able to open vector drawables. Note that it does not always handle fill-rule correctly.
