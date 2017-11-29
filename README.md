@@ -3,7 +3,7 @@ Batch converter of SVG images to Android VectorDrawable XML resource files.
 
 Put the output XML files into the ‘res/drawable’ directory of your app and reference to them in XML / Java code as to ordinary drawables.
 
-### **Online version** of the converter (not batch) is [here](http://a-student.github.io/SvgToVectorDrawableConverter.Web/).
+### **Online version** of the converter is [here](http://a-student.github.io/SvgToVectorDrawableConverter.Web/).
 
 ## Requirements
 Inkscape (free and open-source vector graphics software) must be installed. Download it from https://inkscape.org/en/download
