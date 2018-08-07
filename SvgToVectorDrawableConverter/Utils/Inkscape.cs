@@ -41,7 +41,7 @@ namespace SvgToVectorDrawableConverter.Utils
             }
 
             var arguments = $"-f \"{inputPath}\" -D -l \"{outputPath}\"";
-            using (var process = Process.Start(new ProcessStartInfo(appPath, arguments) { WorkingDirectory = Path.GetDirectoryName(appPath) }))
+            using (var process = Process.Start(new ProcessStartInfo(appPath, arguments) { WorkingDirectory = Path.GetDirectoryName(appPath), CreateNoWindow = true, RedirectStandardOutput = true }))
             {
                 process.WaitForExit();
             }

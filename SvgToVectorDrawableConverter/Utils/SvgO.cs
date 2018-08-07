@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace SvgToVectorDrawableConverter.Utils
 {
@@ -32,7 +33,8 @@ namespace SvgToVectorDrawableConverter.Utils
                 return Path.GetFullPath(fileName);
 
             var values = Environment.GetEnvironmentVariable("PATH");
-            foreach (var path in values.Split(';'))
+            var splitChar = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ';' : ':';
+            foreach (var path in values.Split(splitChar))
             {
                 var fullPath = Path.Combine(path, fileName);
                 if (File.Exists(fullPath))
@@ -50,7 +52,7 @@ namespace SvgToVectorDrawableConverter.Utils
                 throw new ApplicationException("svgo was not found, please ensure you have installed it globally with `npm install -g svgo`.");
 
             var arguments = $"{svgoModulePath} -i \"{inputPath}\" -o \"{outputPath}\"";
-            using (var process = Process.Start(new ProcessStartInfo(appPath, arguments) { WorkingDirectory = workingDir }))
+            using (var process = Process.Start(new ProcessStartInfo(appPath, arguments) { WorkingDirectory = workingDir, CreateNoWindow = true, RedirectStandardOutput = true }))
             {
                 process.WaitForExit();
             }
