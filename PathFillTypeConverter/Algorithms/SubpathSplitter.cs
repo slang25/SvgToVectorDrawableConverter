@@ -23,8 +23,8 @@ namespace PathFillTypeConverter.Algorithms
                     }
                     yield break;
                 }
-                SegmentBase segment1, segment2;
-                var intersection = segments[i].SplitByNextIntersection(i > 0 ? segments[i - 1].EndPoint : startPoint, out segment1, out segment2);
+
+                var intersection = segments[i].SplitByNextIntersection(i > 0 ? segments[i - 1].EndPoint : startPoint, out SegmentBase segment1, out SegmentBase segment2);
                 var segments1 = segments.GetRange(0, i);
                 if (segment1 != null)
                 {

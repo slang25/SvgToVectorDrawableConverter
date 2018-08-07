@@ -1,4 +1,14 @@
-﻿# SVG to VectorDrawable Converter
+﻿# This is a heavily modified fork! Beware!
+When dealing with an app project in Zeplin, vector resources are provided in the form of PDFs (wat?!?! I know right!!). This tool solves that!
+
+Changes from forked origin:
+- Now targets .NET Core 2.1
+- This is now a global tool that can be installed and ran with one command
+- The first thing it will do is convert from PDF -> SVG
+- Once it has an SVG, it will use node and svgo (required to be installed first) to optimize the SVG.
+- Debugger and tests projects gone, I needed to move quick and break things, let's see how that pans out.
+
+# SVG to VectorDrawable Converter
 Batch converter of SVG images to Android VectorDrawable XML resource files.
 
 Put the output XML files into the ‘res/drawable’ directory of your app and reference to them in XML / Java code as to ordinary drawables.

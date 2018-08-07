@@ -1,148 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{065B2607-256B-4F86-8367-7197F6F5EA3B}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SvgToVectorDrawableConverter</RootNamespace>
     <AssemblyName>svg2vd</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <DebugSymbols>false</DebugSymbols>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>svg2vd</ToolCommandName>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommandLine, Version=1.9.71.2, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommandLineParser.1.9.71\lib\net45\CommandLine.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=11.0.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.11.0.0\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="MathNet.Numerics, Version=3.20.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MathNet.Numerics.3.20.0\lib\net40\MathNet.Numerics.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+    <PackageReference Include="CommandLineParser" Version="2.2.1" />
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+    <PackageReference Include="MathNet.Numerics" Version="4.5.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="2.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="DataFormat\Common\DocumentWrapper.cs" />
-    <Compile Include="DataFormat\Common\Element.cs" />
-    <Compile Include="DataFormat\Common\ElementCollection.cs" />
-    <Compile Include="DataFormat\Common\ElementFactory.cs" />
-    <Compile Include="DataFormat\Common\ElementWithChildren.cs" />
-    <Compile Include="DataFormat\Common\UnsupportedElement.cs" />
-    <Compile Include="DataFormat\Common\XmlNamesAttribute.cs" />
-    <Compile Include="DataFormat\Converters\SvgToVector\ClipPathHelper.cs" />
-    <Compile Include="DataFormat\Converters\SvgToVector\PathDataFixer.cs" />
-    <Compile Include="DataFormat\Converters\SvgToVector\SvgToVectorDocumentConverter.cs" />
-    <Compile Include="DataFormat\Converters\SvgToVector\UnitConverter.cs" />
-    <Compile Include="DataFormat\Converters\SvgToVector\VectorOptimizer.cs" />
-    <Compile Include="DataFormat\Exceptions\FixFillTypeException.cs" />
-    <Compile Include="DataFormat\Exceptions\UnsupportedFormatException.cs" />
-    <Compile Include="DataFormat\Extensions\StringExtension.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Defs.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Desc.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\G.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Metadata.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Parser.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Path.cs" />
-    <Compile Include="DataFormat\Converters\SvgToVector\StyleHelper.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Styler.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Svg.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\SvgDocumentWrapper.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Style.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Title.cs" />
-    <Compile Include="DataFormat\ScalableVectorGraphics\Transform.cs" />
-    <Compile Include="DataFormat\Utils\SvgUseElementInliner.cs" />
-    <Compile Include="DataFormat\VectorDrawable\ClipPath.cs" />
-    <Compile Include="DataFormat\VectorDrawable\PathBase.cs" />
-    <Compile Include="UpdateChecker.cs" />
-    <Compile Include="Utils\SvgPreprocessor.cs" />
-    <Compile Include="DataFormat\VectorDrawable\FillType.cs" />
-    <Compile Include="DataFormat\VectorDrawable\Group.cs" />
-    <Compile Include="DataFormat\VectorDrawable\Path.cs" />
-    <Compile Include="DataFormat\VectorDrawable\Vector.cs" />
-    <Compile Include="DataFormat\VectorDrawable\VectorDocumentWrapper.cs" />
-    <Compile Include="Options.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\App.cs" />
-    <Compile Include="Utils\Inkscape.cs" />
-    <Compile Include="Utils\PathHelper.cs" />
+    <ProjectReference Include="..\PathFillTypeConverter\PathFillTypeConverter.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="BlankVectorDrawable.xml">
+    <None Update="BlankVectorDrawable.ApiLevel24.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="BlankVectorDrawable.BetterVectorDrawable.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="BlankVectorDrawable.res-auto.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="BlankVectorDrawable.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="BlankVectorDrawable.BetterVectorDrawable.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="BlankVectorDrawable.res-auto.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PathFillTypeConverter\PathFillTypeConverter.csproj">
-      <Project>{af734cdc-3d9e-437d-93bb-1d75c01f5363}</Project>
-      <Name>PathFillTypeConverter</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="BlankVectorDrawable.ApiLevel24.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <Import Project="$(SolutionDir)\ILMerge.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

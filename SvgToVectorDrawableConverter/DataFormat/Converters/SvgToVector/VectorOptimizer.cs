@@ -19,13 +19,14 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             foreach (var element in elements)
             {
-                if (element is ElementWithChildren)
+                switch (element)
                 {
-                    ResetIneffectiveAttributesRecursively(((ElementWithChildren)element).Children);
-                }
-                else if (element is Path)
-                {
-                    ResetIneffectiveAttributes((Path)element);
+                    case ElementWithChildren elementWithChild:
+                        ResetIneffectiveAttributesRecursively(elementWithChild.Children);
+                        break;
+                    case Path leafElement:
+                        ResetIneffectiveAttributes(leafElement);
+                        break;
                 }
             }
         }
@@ -95,16 +96,9 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             for (var i = 0; i < elements.Count; i++)
             {
-                var element = elements[i] as ElementWithChildren;
-                if (element == null)
-                {
-                    continue;
-                }
+                if (!(elements[i] is ElementWithChildren element)) continue;
                 RemoveEmptyGroups(element.Children);
-                if (element.Children.All(x => x is ClipPath))
-                {
-                    elements.RemoveAt(i--);
-                }
+                if (element.Children.All(x => x is ClipPath)) elements.RemoveAt(i--);
             }
         }
 
@@ -112,11 +106,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             for (var i = 0; i < elements.Count; i++)
             {
-                var group = elements[i] as Group;
-                if (group == null)
-                {
-                    continue;
-                }
+                if (!(elements[i] is Group group)) continue;
                 EliminateUselessGroupNesting(group.Children);
                 if (IsUselessGroup(group))
                 {

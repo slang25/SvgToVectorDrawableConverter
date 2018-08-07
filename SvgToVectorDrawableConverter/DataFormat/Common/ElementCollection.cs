@@ -29,8 +29,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Common
         public T Append<T>()
             where T : Element
         {
-            XmlElement child;
-            var result = ElementFactory.Create<T>(_xmlElement.OwnerDocument, out child);
+            var result = ElementFactory.Create<T>(_xmlElement.OwnerDocument, out XmlElement child);
             _xmlElement.AppendChild(child);
             return result;
         }

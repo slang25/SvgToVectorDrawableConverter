@@ -230,9 +230,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
         private void Init(Group outerGroup, Group innerGroup, Transform transform, StringDictionary style)
         {
-            if (transform is Transform.Matrix)
+            if (transform is Transform.Matrix matrix)
             {
-                var matrix = (Transform.Matrix)transform;
                 if (matrix.A == 0 && matrix.D == 0)
                 {
                     innerGroup.Rotation = 90;
@@ -261,21 +260,18 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
                     outerGroup.TranslateY = matrix.F;
                 }
             }
-            if (transform is Transform.Translate)
+            if (transform is Transform.Translate translate)
             {
-                var translate = (Transform.Translate)transform;
                 innerGroup.TranslateX = translate.Tx;
                 innerGroup.TranslateY = translate.Ty;
             }
-            if (transform is Transform.Scale)
+            if (transform is Transform.Scale scale)
             {
-                var scale = (Transform.Scale)transform;
                 innerGroup.ScaleX = scale.Sx;
                 innerGroup.ScaleY = scale.Sy;
             }
-            if (transform is Transform.Rotate)
+            if (transform is Transform.Rotate rotate)
             {
-                var rotate = (Transform.Rotate)transform;
                 innerGroup.Rotation = rotate.Angle;
                 innerGroup.PivotX = rotate.Cx;
                 innerGroup.PivotY = rotate.Cy;

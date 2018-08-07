@@ -26,9 +26,8 @@ namespace PathFillTypeConverter.Algorithms.CurveEquations
             var a = _startPoint - 2 * _controlPoint + _endPoint;
             var b = 2 * (-_startPoint + _controlPoint);
             var c = _startPoint - point;
-            double tX1, tX2, tY1, tY2;
-            EquationSolver.SolveQuadratic(a.X, b.X, c.X, out tX1, out tX2);
-            EquationSolver.SolveQuadratic(a.Y, b.Y, c.Y, out tY1, out tY2);
+            EquationSolver.SolveQuadratic(a.X, b.X, c.X, out double tX1, out double tX2);
+            EquationSolver.SolveQuadratic(a.Y, b.Y, c.Y, out double tY1, out double tY2);
             return GetClosestT(point, tX1, tX2, tY1, tY2);
         }
     }

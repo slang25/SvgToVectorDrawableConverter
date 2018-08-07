@@ -30,9 +30,8 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
 
             foreach (var child in element.Children)
             {
-                if (child is Path)
+                if (child is Path path)
                 {
-                    var path = (Path)child;
                     yield return new PathWithStyle(path, StyleHelper.MergeStyles(style, path.Style));
                 }
                 if (child is ElementWithChildren)

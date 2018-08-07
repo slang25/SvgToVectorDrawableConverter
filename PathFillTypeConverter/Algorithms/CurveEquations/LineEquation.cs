@@ -23,9 +23,8 @@ namespace PathFillTypeConverter.Algorithms.CurveEquations
         {
             var a = -_startPoint + _endPoint;
             var b = _startPoint - point;
-            double tX, tY;
-            EquationSolver.SolveLinear(a.X, b.X, out tX);
-            EquationSolver.SolveLinear(a.Y, b.Y, out tY);
+            EquationSolver.SolveLinear(a.X, b.X, out double tX);
+            EquationSolver.SolveLinear(a.Y, b.Y, out double tY);
             return GetClosestT(point, tX, tY);
         }
     }

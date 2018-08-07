@@ -65,8 +65,7 @@ namespace SvgToVectorDrawableConverter.DataFormat.Converters.SvgToVector
         {
             if (parameter.Any(x => x == 'e' || x == 'E'))
             {
-                double value;
-                if (double.TryParse(parameter, NumberStyles.Float, CultureInfo.InvariantCulture, out value))
+                if (double.TryParse(parameter, NumberStyles.Float, CultureInfo.InvariantCulture, out double value))
                 {
                     parameter = value.ToString(DoubleFixedPointFormat, CultureInfo.InvariantCulture);
                 }

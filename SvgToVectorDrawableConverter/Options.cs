@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using CommandLine;
-using CommandLine.Text;
 using SvgToVectorDrawableConverter.Utils;
 
 namespace SvgToVectorDrawableConverter
@@ -63,6 +62,7 @@ namespace SvgToVectorDrawableConverter
         public string BlankVectorDrawablePath => Path.Combine(App.Directory, $"BlankVectorDrawable{(string.IsNullOrEmpty(Lib) ? "" : "." + Lib)}.xml");
 
         private string _inkscapeAppPath;
+        private string _svgoPath;
 
         [Option("inkscape", HelpText = "Path to the Inkscape app file. Specify this if your Inkscape installation directory differs from the default.")]
         public string InkscapeAppPath
@@ -78,26 +78,23 @@ namespace SvgToVectorDrawableConverter
             set { _inkscapeAppPath = value; }
         }
 
-        [Option("fix-fill-type", HelpText = "Experimental.")]
-        public bool FixFillType { get; set; }
-
-        [Option("no-update-check", HelpText = "Skip everyday check for the latest converter version.")]
-        public bool NoUpdateCheck { get; set; }
-
-        [ParserState]
-        public IParserState LastParserState { get; set; }
-
-        [HelpOption]
-        public string GetUsage()
+        [Option("svgo", HelpText = "Path to the svgo. Specify this if your svgo location differs from the default.")]
+        public string SvgOPath
         {
-            var helpText = new HelpText { AddDashesToOption = true };
-            HelpText.DefaultParsingErrorsHandler(this, helpText);
-            helpText.AddPreOptionsLine($"Usage: {App.ExeName} -i <input file mask> [-o <output directory>] [--lib <lib name>] [--inkscape <inkscape app path>] [--fix-fill-type] [--no-update-check]");
-            helpText.AddOptions(this);
-            helpText.AddPostOptionsLine(GetGithub());
-            return helpText;
+            get
+            {
+                if (string.IsNullOrEmpty(_svgoPath))
+                {
+                    return SvgO.FindAppPath();
+                }
+                return _svgoPath;
+            }
+            set { _svgoPath = value; }
         }
 
+        [Option("fix-fill-type", HelpText = "Experimental.")]
+        public bool FixFillType { get; set; }
+        
         private static string GetGithub()
         {
             return "If you have any problems with the converter, please create an issue on GitHub (https://github.com/a-student/SvgToVectorDrawableConverter/issues/new), explain the reproducing steps, and add link to the SVG file (link is optional but highly recommended)."

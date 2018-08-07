@@ -41,9 +41,8 @@ namespace PathFillTypeConverter
                     builder.Append(PointToString(segment.EndPoint));
                     builder.Append(' ');
                 }
-                else if (segment is CubicBezierSegment)
+                else if (segment is CubicBezierSegment cubicBezierSegment)
                 {
-                    var cubicBezierSegment = (CubicBezierSegment)segment;
                     builder.Append('C');
                     builder.Append(PointToString(cubicBezierSegment.ControlPoint1));
                     builder.Append(' ');
@@ -52,18 +51,16 @@ namespace PathFillTypeConverter
                     builder.Append(PointToString(cubicBezierSegment.EndPoint));
                     builder.Append(' ');
                 }
-                else if (segment is QuadraticBezierSegment)
+                else if (segment is QuadraticBezierSegment quadraticBezierSegment)
                 {
-                    var quadraticBezierSegment = (QuadraticBezierSegment)segment;
                     builder.Append('Q');
                     builder.Append(PointToString(quadraticBezierSegment.ControlPoint));
                     builder.Append(' ');
                     builder.Append(PointToString(quadraticBezierSegment.EndPoint));
                     builder.Append(' ');
                 }
-                else if (segment is EllipticalArcSegment)
+                else if (segment is EllipticalArcSegment ellipticalArcSegment)
                 {
-                    var ellipticalArcSegment = (EllipticalArcSegment)segment;
                     builder.Append('A');
                     builder.Append(PointToString(ellipticalArcSegment.Radii));
                     builder.Append(' ');

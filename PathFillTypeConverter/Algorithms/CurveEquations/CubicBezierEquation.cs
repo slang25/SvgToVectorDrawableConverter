@@ -29,9 +29,8 @@ namespace PathFillTypeConverter.Algorithms.CurveEquations
             var b = 3 * (_startPoint - 2 * _controlPoint1 + _controlPoint2);
             var c = 3 * (-_startPoint + _controlPoint1);
             var d = _startPoint - point;
-            double tX1, tX2, tX3, tY1, tY2, tY3;
-            EquationSolver.SolveCubic(a.X, b.X, c.X, d.X, out tX1, out tX2, out tX3);
-            EquationSolver.SolveCubic(a.Y, b.Y, c.Y, d.Y, out tY1, out tY2, out tY3);
+            EquationSolver.SolveCubic(a.X, b.X, c.X, d.X, out double tX1, out double tX2, out double tX3);
+            EquationSolver.SolveCubic(a.Y, b.Y, c.Y, d.Y, out double tY1, out double tY2, out double tY3);
             return GetClosestT(point, tX1, tX2, tX3, tY1, tY2, tY3);
         }
     }
