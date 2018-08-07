@@ -46,6 +46,8 @@ namespace SvgToVectorDrawableConverter.Utils
         public static void OptimizeSvg(string appPath, string inputPath, string outputPath)
         {
             var workingDir = new FileInfo(GetFullPath(appPath)).Directory.FullName;
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                workingDir = workingDir.Replace("/bin", "/lib");
             const string svgoModulePath = "./node_modules/svgo/bin/svgo";
             var svgoFullPath = Path.Combine(workingDir, svgoModulePath);
             if (!File.Exists(svgoFullPath))
