@@ -6,7 +6,7 @@ Changes from forked origin:
 - This is now a global tool that can be installed and ran with one command
 - The first thing it will do is convert from PDF -> SVG
 - Once it has an SVG, it will use node and svgo (required to be installed first) to optimize the SVG.
-- Debugger and tests projects gone, I needed to move quick and break things, let's see how that pans out.
+- Debugger and tests projects gone, I needed to move quick and break things, let's see how that pans out 🤠.
 
 # SVG to VectorDrawable Converter
 Batch converter of SVG images to Android VectorDrawable XML resource files.
