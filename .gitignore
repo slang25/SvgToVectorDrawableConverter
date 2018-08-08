@@ -8,3 +8,5 @@ _ReSharper.*
 *.vspx
 
 /test-data
+
+.DS_Store
